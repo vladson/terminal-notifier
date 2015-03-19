@@ -6,7 +6,12 @@ module TerminalNotifier
   class UnsupportedPlatformError < StandardError; end
   # Returns wether or not the current platform is Mac OS X 10.8, or higher.
   def self.available?
-    @available ||= (/darwin/ =~ RUBY_PLATFORM) && Gem::Version.new(version) > Gem::Version.new('10.8')
+    @available ||= case RUBY_PLATFORM
+      when 'java', /darwin/
+        Gem::Version.new(version) > Gem::Version.new('10.8')
+      else
+        false
+      end
   end
 
   def self.version
